@@ -4,14 +4,12 @@ const user = require('../models/userSchema');
 const {jwtAuthMiddleware, generateToken} = require('../jwt')
 
 router.post('/signup', async(req, res)=>{
-    try {
-        
+    try { 
         const data = req.body;
-        //to check whether admin already exists or not
         const adminUser = await user.findOne({role: 'admin'});
-        
+        //to check whether admin already exists or not
         if(data.role === 'admin' && adminUser){
-            return res.status(400).json({ error: 'Admin user already exists' });
+            return res.status(401).json({ error: 'Admin already exists' });
         }
         
         const newUser = new user(data);
@@ -44,7 +42,8 @@ router.post('/login', async(req, res)=>{
             username: response.name
         }
         const token = generateToken(payload);
-        res.json({token});
+        const role = response.role;
+        res.json({token, role});
     } catch (error) {
         console.log(error);
         res.status(500).json({error: 'internal server error'});

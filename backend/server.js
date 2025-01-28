@@ -4,6 +4,9 @@ const db = require('./db');
 require('dotenv').config()
 const {jwtAuthMiddleware} = require('./jwt')
 
+const cors = require('cors')
+app.use(cors())
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json())
 const PORT = process.env.PORT || 3000;

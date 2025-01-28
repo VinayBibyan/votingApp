@@ -33,15 +33,14 @@ router.post('/voteTo/:candidateId', jwtAuthMiddleware, async(req, res)=>{
 
     userID = req.user.id;
     candidateId = req.params.candidateId;
+    console.log(userID)
+    console.log(candidateId)
+
     try {
         // Find the Candidate document with the specified candidateID
         const candidateData = await candidate.findById(candidateId);
         if(!candidateData){
             return res.status(404).json({ message: 'Candidate not found' });
-        }
-
-        if( await checkAdmin(req.user.id)){
-            return res.status(403).json({message: 'user is admin, hence can not vote'});
         }
 
         const voter = await user.findById(userID);

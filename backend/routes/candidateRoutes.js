@@ -4,25 +4,20 @@ const candidate = require('../models/candidateSchema');
 const {jwtAuthMiddleware, generateToken} = require('../jwt')
 const user = require('../models/userSchema')
 
-const checkAdmin = async(userID)=>{
+//to get all candidates data to the admin
+router.get('/CandidateList',async (req,res)=>{
     try {
-        const response = await user.findById(userID);
-        if(response.role === 'admin'){
-            return true;
-        }
+        const data = await candidate.find();
+        res.status(200).json(data);
     } catch (error) {
-        console.log("yhh wala section")
-        return false
+        console.log(error);
+        res.status(500).send({error: 'can not show data'})
     }
-
-}
+})
 
 //to add new candidate
 router.post('/new', jwtAuthMiddleware, async(req, res)=>{
     try {
-        if(! await checkAdmin(req.user.id)){
-            return res.status(403).json({message: 'user is not admin'})
-        }
         const data = req.body;
         const newCandidate = new candidate(data);
         const savedCandidate = await newCandidate.save();
@@ -37,9 +32,6 @@ router.post('/new', jwtAuthMiddleware, async(req, res)=>{
 //to update candidate data
 router.put('/:candidateID', jwtAuthMiddleware, async(req, res)=>{
     try {
-        if(! checkAdmin(req.user.id)){
-            return res.status(404).json({message: 'user is not admin'})
-        }
         const candidateID = req.params.candidateID;
         const updatedCandidateData = req.body;
 
@@ -60,10 +52,6 @@ router.put('/:candidateID', jwtAuthMiddleware, async(req, res)=>{
 //to delete any candidate
 router.delete('/:candidateID', jwtAuthMiddleware, async(req, res)=>{
     try {
-        if(! checkAdmin(req.user.id)){
-            return res.status(403).json({message: 'user is not admin'})
-        }
-
         const candidateID = req.params.candidateID;
 
         const response = await candidate.findByIdAndDelete(candidateID);
@@ -79,4 +67,5 @@ router.delete('/:candidateID', jwtAuthMiddleware, async(req, res)=>{
         res.status(500).json({error})
     }
 })
+
 module.exports = router;
