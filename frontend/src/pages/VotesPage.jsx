@@ -11,7 +11,7 @@ function VotesPage() {
     useEffect(() => {
         const fetchCandidates = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/vote/list');
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/vote/list`);
             setCandidates(response.data);
             setError((prev) => ({ ...prev, candidates: null }));
           } catch (err) {
@@ -23,7 +23,7 @@ function VotesPage() {
     
         const fetchVoteCounts = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/vote/count');
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/vote/count`);
             setVoteCounts(response.data);
             setError((prev) => ({ ...prev, votes: null }));
           } catch (err) {

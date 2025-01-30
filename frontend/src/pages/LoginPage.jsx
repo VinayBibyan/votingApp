@@ -12,7 +12,7 @@ function LoginPage() {
         e.preventDefault();
     
         try {
-          const response = await axios.post('http://localhost:3000/user/login', {
+          const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/login`, {
             aadharCardNumber,
             password,
           });

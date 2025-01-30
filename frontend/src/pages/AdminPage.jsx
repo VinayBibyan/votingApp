@@ -16,7 +16,7 @@ function AdminPage() {
   const fetchCandidates = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/candidate/candidateList');
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/candidate/candidateList`);
       setCandidates(response.data);
       setLoading(false);
     } catch (error) {
@@ -34,7 +34,7 @@ function AdminPage() {
     
     try {
       setError(null);
-      const response = await axios.post("http://localhost:3000/candidate/new", newCandidate, {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/candidate/new`, newCandidate, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setCandidates([...candidates, response.data.response]);
@@ -52,7 +52,7 @@ function AdminPage() {
         party: editCandidate.party,
         age: editCandidate.age,
       };
-      await axios.put(`http://localhost:3000/candidate/${id}`, allowedUpdates, {
+      await axios.put(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/candidate/${id}`, allowedUpdates, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setCandidates(
@@ -70,7 +70,7 @@ function AdminPage() {
   const deleteCandidate = async (id) => {
     
     try {
-      await axios.delete(`http://localhost:3000/candidate/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/candidate/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setCandidates(candidates.filter((candidate) => candidate._id !== id));

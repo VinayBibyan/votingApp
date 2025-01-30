@@ -19,7 +19,7 @@ function ProfilePage() {
         // Fetch user profile data
         const fetchProfileData = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/user/profile', {
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/profile`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

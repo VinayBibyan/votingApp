@@ -11,7 +11,7 @@ function VoteToCandidatePage() {
     useEffect(() => {
         const fetchCandidates = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/vote/list');
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/vote/list`);
             setCandidates(response.data);
             setError(null);
           } catch (err) {
@@ -29,7 +29,7 @@ function VoteToCandidatePage() {
           const token = localStorage.getItem('token'); // Assume JWT is stored in local storage
           console.log(token)
           const response = await axios.post(
-            `http://localhost:3000/vote/voteTo/${candidateId}`,{},
+            `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/vote/voteTo/${candidateId}`,{},
             {
               headers: {
                 Authorization: `Bearer ${token}`,

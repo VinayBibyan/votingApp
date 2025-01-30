@@ -23,10 +23,10 @@ const Signup = () => {
   useEffect(() => {
     checkAdminExists();
   }, []);
-
+  
   const checkAdminExists = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/user/adminExists');
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/adminExists`);
       setAdminExists(response.data.adminExists);
     } catch (error) {
       console.error('Error checking admin:', error);
@@ -46,7 +46,7 @@ const Signup = () => {
     let hasError = false;
 
     try {
-      const response = await axios.post('http://localhost:3000/user/signup', formData);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/signup`, formData);
       setSuccess('Signup successful!');
       console.log(response.data);
 
