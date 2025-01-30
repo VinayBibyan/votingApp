@@ -19,9 +19,12 @@ router.get('/CandidateList',async (req,res)=>{
 router.post('/new', jwtAuthMiddleware, async(req, res)=>{
     try {
         const data = req.body;
+        if (data.age < 18) {
+            return res.status(400).json({ error: "Candidate must be at least 18 years old" });
+        }
         const newCandidate = new candidate(data);
         const savedCandidate = await newCandidate.save();
-        
+
         res.status(200).json({response: savedCandidate});
     } catch (error) {
         console.log()

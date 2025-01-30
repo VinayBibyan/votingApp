@@ -4,7 +4,7 @@ import axios from "axios";
 
 function AdminPage() {
   const [candidates, setCandidates] = useState([]);
-  const [newCandidate, setNewCandidate] = useState({ name: "", party: "", age: 0 });
+  const [newCandidate, setNewCandidate] = useState({ name: "", party: "", age: '' });
   const [editCandidate, setEditCandidate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +27,13 @@ function AdminPage() {
   };
 
   const addCandidate = async () => {
+    if (newCandidate.age < 18) {
+      setError("Candidate must be at least 18 years old.");
+      return;
+    }
+    
     try {
+      setError(null);
       const response = await axios.post("http://localhost:3000/candidate/new", newCandidate, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -124,11 +130,10 @@ return (
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Candidates List
       </h2>
+      {error && <p className="text-center text-red-500 mb-4">{error}</p>}
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
-      ) : error ? (
-        <p className="text-center text-red-500">{error}</p>
-      ) : (
+      ):(
         <ul className="space-y-6">
           {candidates.map((candidate) => (
             <li

@@ -91,4 +91,14 @@ router.put('/profile/changePassword', jwtAuthMiddleware,  async(req, res)=>{
     }
 })
 
+router.get('/adminExists', async (req, res) => {
+    try {
+        const admin = await user.findOne({ role: 'admin' });
+        res.json({ adminExists: !!admin });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;

@@ -1,5 +1,5 @@
 // Import necessary libraries
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,9 +15,23 @@ const Signup = () => {
     role: 'voter', // Default role is 'user'
   });
 
+  const [adminExists, setAdminExists] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAdminExists();
+  }, []);
+
+  const checkAdminExists = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/user/adminExists');
+      setAdminExists(response.data.adminExists);
+    } catch (error) {
+      console.error('Error checking admin:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -156,18 +170,20 @@ const Signup = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Role</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
-          >
-            <option value="user">voter</option>
-            <option value="admin">admin</option>
-          </select>
-        </div>
+        {!adminExists && (
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Role</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+            >
+              <option value="voter">Voter</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        )}
 
         <button
           type="submit"
